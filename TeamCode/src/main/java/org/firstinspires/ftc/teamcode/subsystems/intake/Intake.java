@@ -22,6 +22,14 @@ public class Intake extends SubsystemBase {
         positioner.setSlidePosition(coords.getScale());
     }
 
+    public double getSlidePosition() {
+        return positioner.getSlidePosition();
+    }
+
+    public double getAngle() {
+        return positioner.getAngle();
+    }
+
     public void intake() {
         intake.intake();
     }

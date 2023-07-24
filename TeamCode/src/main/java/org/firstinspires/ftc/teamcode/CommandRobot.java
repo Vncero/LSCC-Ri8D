@@ -1,40 +1,37 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.arcrobotics.ftclib.command.Robot;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-import kong.unirest.Unirest;
+import android.widget.SimpleAdapter;
+import com.arcrobotics.ftclib.hardware.ServoEx;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.teamcode.subsystems.drivetrain.Drivetrain;
+import org.firstinspires.ftc.teamcode.subsystems.drivetrain.simulation.SimulableDrivetrain;
+import org.firstinspires.ftc.teamcode.subsystems.intake.Positioner;
+import org.firstinspires.ftc.teamcode.subsystems.intake.RollerIntake;
+import org.firstinspires.ftc.teamcode.subsystems.intake.simulation.SimulableIntake;
+import org.firstinspires.ftc.teamcode.util.Direction;
 
-public class CommandRobot extends Robot {
-    private final boolean simEnabled;
+public class CommandRobot extends SimulableRobot {
 
-    private Drivetrain drivetrain;
+    private final SimulableDrivetrain drivetrain;
+    private final SimulableIntake intake;
 
-    public CommandRobot(boolean simEnabled) {
-        this.simEnabled = simEnabled;
+    public CommandRobot(HardwareMap hwMap) {
+        super("http://localhost:1000/postdata");
 
-        if (simEnabled) {
-            this.drivetrain = new Drivetrain();
-        }
-    }
+        this.drivetrain = new SimulableDrivetrain(
+                hwMap.get(DcMotorEx.class, "drivetrainLeftMotor"),
+                hwMap.get(DcMotorEx.class, "drivetrainRightMotor"),
+                "drivetrain");
 
-    /**
-     * Takes current state of subsystems and POSTs them to sim
-     */
-    public void updateSim() {
-        if (simEnabled) {
-            final ObjectMapper mapper = new ObjectMapper();
+        this.intake = new SimulableIntake(
+                new RollerIntake(hwMap.get(ServoEx.class, "intakePositioner"), hwMap.get(DcMotorEx.class, "intakeMotor")),
+                new Positioner(hwMap.get(DcMotorEx.class, "slidePivotMotor"), hwMap.get(DcMotorEx.class, "slideMotor")),
+                new String[] {"ls1", "ls2", "ls3", "ls4"}, Direction.Z,
+                "lsPivot", Direction.X,
+                "intake", Direction.X
+        );
 
-            ObjectNode body = mapper.createObjectNode();
-
-            body.putArray("data")
-                    .add(drivetrain.updateSimState(mapper));
-            // etc.
-
-            Unirest.post("http://localhost:1000/postdata")
-                    .header("Content-Type", "application/json")
-                    .body(body.toPrettyString());
-        }
+        registerSimulable(intake);
     }
 }

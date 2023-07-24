@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.subsystems.intake;
 import com.arcrobotics.ftclib.hardware.ServoEx;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 
 public class RollerIntake {
 
@@ -11,6 +12,10 @@ public class RollerIntake {
     // intake
     private static final float DEFAULT_INTAKE_POWER = 0.8f;
     public static final long INTAKE_TIME_SECONDS = 1;
+
+    // current for when the motor has something inside
+    public static final double STALL_CURRENT_AMPS = 10;
+
 
     private final ServoEx pivotServo;
     private final DcMotorEx intakeMotor;
@@ -58,5 +63,9 @@ public class RollerIntake {
 
     public void stopIntake() {
         intakeMotor.setPower(0);
+    }
+
+    public boolean hasGameElement() {
+        return this.intakeMotor.getCurrent(CurrentUnit.AMPS) <= STALL_CURRENT_AMPS; 
     }
 }
