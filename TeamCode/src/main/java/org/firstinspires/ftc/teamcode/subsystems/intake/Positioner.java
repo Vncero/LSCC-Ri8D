@@ -6,12 +6,13 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 public class Positioner {
 
     // ANGLE
-    private static final double ANGLE_DEGREE_PER_TICK = 1;
+    // NOTE: the angle most be zeroed at the horizontal position
+    private static final double ANGLE_DEGREE_PER_TICK = 0.1;
     private static final double ANGLE_ERROR_THRESHOLD_DEGREES = 1; // 1 degree
 
     // SLIDE
-    private static final double SLIDE_INITIAL_POSITION_INCHES = 13.2283;
-    private static final double SLIDE_INCHES_PER_TICK = 1;
+    public static final double SLIDE_INITIAL_POSITION_INCHES = 13.2283; // from gobilda viper kit
+    private static final double SLIDE_INCHES_PER_TICK = 0.05;
     private static final double SLIDE_ERROR_THRESHOLD_INCHES = 0.5; // eyeballed
 
     private final DcMotorEx angleMotor;
@@ -48,8 +49,8 @@ public class Positioner {
         return Math.abs(angleMotor.getTargetPosition() - angleMotor.getCurrentPosition()) * ANGLE_DEGREE_PER_TICK <= ANGLE_ERROR_THRESHOLD_DEGREES;
     }
 
-    public void setTargetAngle(double targetAngle) {
-        angleMotor.setTargetPosition((int) (targetAngle / ANGLE_DEGREE_PER_TICK));
+    public void setTargetAngle(double degrees) {
+        angleMotor.setTargetPosition((int) (degrees / ANGLE_DEGREE_PER_TICK));
     }
 
     // SLIDE
@@ -75,6 +76,4 @@ public class Positioner {
     public void setSlidePosition(double position) {
         slideMotor.setTargetPosition((int) (Math.max(position - SLIDE_INITIAL_POSITION_INCHES, 0) / SLIDE_INCHES_PER_TICK));
     }
-
-
 }

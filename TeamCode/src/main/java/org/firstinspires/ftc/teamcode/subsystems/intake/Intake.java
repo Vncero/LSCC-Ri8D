@@ -22,6 +22,20 @@ public class Intake extends SubsystemBase {
         positioner.setSlidePosition(coords.getScale());
     }
 
+    public void stow() {
+        intake.setTargetAngle(-180);
+        positioner.setTargetAngle(90);
+        positioner.setSlidePosition(positioner.getMinimumSlidePosition());
+    }
+
+    public double getSlidePosition() {
+        return positioner.getSlidePosition();
+    }
+
+    public double getAngle() {
+        return positioner.getAngle();
+    }
+
     public void intake() {
         intake.intake();
     }
@@ -40,6 +54,10 @@ public class Intake extends SubsystemBase {
 
     public void stopIntake() {
         intake.stopIntake();
+    }
+
+    public boolean intakeHasElement() {
+        return intake.hasGameElement();
     }
 
     public boolean atPosition() {

@@ -32,6 +32,35 @@ public class Pose3d {
         this.z = z;
     }
 
+    public double getPos(Direction direction) {
+        switch (direction) {
+            case X:
+            default:
+                return this.x;
+            case Y:
+                return this.y;
+            case Z:
+                return this.z;
+        }
+    }
+
+    public Pose3d setPos(Direction direction, double pos) {
+        switch (direction) {
+            case X:
+            default:
+                this.x = pos;
+                break;
+            case Y:
+                this.y = pos;
+                break;
+            case Z:
+                this.z = pos;
+                break;
+        }
+        return this;
+    }
+
+
     public double getXRot() {
         return xRot;
     }
@@ -54,5 +83,33 @@ public class Pose3d {
 
     public void setZRot(double zRot) {
         this.zRot = zRot;
+    }
+
+    public double getRot(Direction direction) {
+        switch (direction) {
+            case X:
+            default:
+                return this.xRot;
+            case Y:
+                return this.yRot;
+            case Z:
+                return this.zRot;
+        }
+    }
+
+    public Pose3d setRot(Direction direction, double rot) {
+        switch (direction) {
+            case X:
+            default:
+                this.xRot = rot;
+                break;
+            case Y:
+                this.yRot = rot;
+                break;
+            case Z:
+                this.zRot = rot;
+                break;
+        }
+        return this;
     }
 }
