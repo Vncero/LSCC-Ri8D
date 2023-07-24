@@ -39,8 +39,8 @@ public class RollerIntake {
     public double getTargetAngle() {
         return pivotServo.getAngle();
     }
-    public void setTargetAngle(double targetAngle) {
-        pivotServo.turnToAngle(targetAngle);
+    public void setTargetAngle(double degrees) {
+        pivotServo.turnToAngle(degrees);
     }
 
     // INTAKE
@@ -66,6 +66,6 @@ public class RollerIntake {
     }
 
     public boolean hasGameElement() {
-        return this.intakeMotor.getCurrent(CurrentUnit.AMPS) <= STALL_CURRENT_AMPS; 
+        return this.intakeMotor.getCurrent(CurrentUnit.AMPS) <= STALL_CURRENT_AMPS;
     }
 }
